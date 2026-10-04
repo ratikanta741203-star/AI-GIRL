@@ -100,6 +100,23 @@ const downloadModal = document.getElementById("download-modal");
 const btnHeaderDownload = document.getElementById("btn-header-download");
 const btnHeroDownload = document.getElementById("btn-hero-download");
 const btnCloseDownload = document.getElementById("btn-close-download");
+const btnInstallApp = document.getElementById("btn-install-app");
+let installPrompt = null;
+
+window.addEventListener("beforeinstallprompt", (event) => {
+  event.preventDefault();
+  installPrompt = event;
+});
+
+window.addEventListener("appinstalled", () => {
+  installPrompt = null;
+  closeDownloadModal();
+  showToast("Prity AI installed successfully!");
+});
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("/static/service-worker.js"));
+}
 
 function openDownloadModal() {
   if (downloadModal) downloadModal.classList.remove("hidden");
@@ -112,6 +129,17 @@ function closeDownloadModal() {
 if (btnHeaderDownload) btnHeaderDownload.addEventListener("click", openDownloadModal);
 if (btnHeroDownload) btnHeroDownload.addEventListener("click", openDownloadModal);
 if (btnCloseDownload) btnCloseDownload.addEventListener("click", closeDownloadModal);
+if (btnInstallApp) {
+  btnInstallApp.addEventListener("click", async () => {
+    if (!installPrompt) {
+      showToast("Use your browser menu and choose ‘Add to Home screen’.", 4500);
+      return;
+    }
+    installPrompt.prompt();
+    await installPrompt.userChoice;
+    installPrompt = null;
+  });
+}
 
 if (downloadModal) {
   downloadModal.addEventListener("click", (e) => {
@@ -877,17 +905,16 @@ function renderTasks() {
     `;
 
     item.querySelector(".task-checkbox").addEventListener("change", async (e) => {
-      if (e.target.checked) {
-        await fetch(`${API}/api/tasks/${task.id}/complete`, { method: "POST" });
-        showToast("Task completed!");
-      } else {
-        // Re-open if unchecked
-      }
+      const action = e.target.checked ? "complete" : "reopen";
+      const res = await fetch(`${API}/api/tasks/${task.id}/${action}`, { method: "POST" });
+      if (!res.ok) throw new Error("Could not update task");
+      showToast(e.target.checked ? "Task completed!" : "Task reopened.");
       loadTasks();
     });
 
     item.querySelector(".btn-delete-task").addEventListener("click", async () => {
-      await fetch(`${API}/api/tasks/${task.id}`, { method: "DELETE" });
+      const res = await fetch(`${API}/api/tasks/${task.id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error("Could not delete task");
       showToast("Task deleted.");
       loadTasks();
     });
@@ -909,7 +936,7 @@ if (formCreateTask) {
     if (!title) return;
 
     try {
-      await fetch(`${API}/api/tasks`, {
+      const res = await fetch(`${API}/api/tasks`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -918,6 +945,7 @@ if (formCreateTask) {
           priority: parseInt(prioInput.value || "0", 10),
         }),
       });
+      if (!res.ok) throw new Error("Could not create task");
       titleInput.value = "";
       descInput.value = "";
       showToast("Task created!");
@@ -950,7 +978,11 @@ async function loadMemory() {
   try {
     const categories = ["personal", "preference", "general"];
     const results = await Promise.all(
-      categories.map((c) => fetch(`${API}/api/memory/${c}`).then((r) => r.json()))
+      categories.map(async (c) => {
+        const response = await fetch(`${API}/api/memory/${c}`);
+        if (!response.ok) throw new Error("Could not fetch memory");
+        return response.json();
+      })
     );
     memoryCache = results.flat().filter(Boolean);
     renderMemory();
@@ -987,7 +1019,8 @@ function renderMemory() {
     `;
 
     item.querySelector(".btn-delete-mem").addEventListener("click", async () => {
-      await fetch(`${API}/api/memory/${mem.id}`, { method: "DELETE" });
+      const res = await fetch(`${API}/api/memory/${mem.id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error("Could not delete memory");
       showToast("Memory deleted.");
       loadMemory();
     });
@@ -1012,11 +1045,12 @@ if (formCreateMemory) {
     if (!key || !value) return;
 
     try {
-      await fetch(`${API}/api/memory`, {
+      const res = await fetch(`${API}/api/memory`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ category, key, value }),
       });
+      if (!res.ok) throw new Error("Could not save memory");
       keyInput.value = "";
       valInput.value = "";
       showToast("Memory saved!");
@@ -1032,7 +1066,8 @@ const btnClearMem = document.getElementById("btn-clear-all-memory");
 if (btnClearMem) {
   btnClearMem.addEventListener("click", async () => {
     if (confirm("Are you sure you want to clear all stored memories?")) {
-      await fetch(`${API}/api/memory/clear`, { method: "POST" });
+      const res = await fetch(`${API}/api/memory/clear`, { method: "POST" });
+      if (!res.ok) throw new Error("Could not clear memory");
       showToast("All memories cleared.");
       loadMemory();
     }
@@ -1102,7 +1137,7 @@ if (btnSaveSettingsPage) {
     }
 
     try {
-      await fetch(`${API}/api/settings`, {
+      const res = await fetch(`${API}/api/settings`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -1111,6 +1146,7 @@ if (btnSaveSettingsPage) {
           proactive_enabled: proCheck ? proCheck.checked : true,
         }),
       });
+      if (!res.ok) throw new Error("Could not save settings");
       showToast("✨ AI Voice & Settings saved successfully!");
     } catch (err) {
       showToast("Settings saved locally.");

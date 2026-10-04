@@ -53,6 +53,7 @@ body {
   min-height: 100vh;
   min-height: -webkit-fill-available;
   overflow-x: hidden;
+  overscroll-behavior: none;
 }
 
 /* Claymorphism Utilities */
@@ -150,7 +151,8 @@ body {
 .app {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
+  min-height: 100dvh;
   max-width: 1400px;
   margin: 0 auto;
   padding: 12px;
@@ -341,6 +343,7 @@ body {
 /* Main & Views Layout */
 .main {
   flex: 1;
+  min-height: 0;
   overflow: hidden;
   position: relative;
   display: flex;
@@ -1505,14 +1508,25 @@ body {
 
 /* Mobile Adjustments */
 @media (max-width: 600px) {
+  body {
+    min-height: 100dvh;
+  }
+
   .app {
     padding: 6px;
     gap: 8px;
+    height: 100dvh;
   }
 
   .header {
     padding: 10px 14px;
+    gap: 8px;
   }
+
+  .header-right { gap: 6px; }
+  .status .label, .stop-speaking-label { display: none; }
+  .status, .stop-speaking-btn { padding: 6px 9px; }
+  .logo-titles .badge { display: none; }
 
   .logo-text {
     font-size: 1.1rem;
@@ -1539,7 +1553,25 @@ body {
 
   .banner-actions {
     justify-content: center;
+    flex-wrap: wrap;
   }
+
+  .chat-header, .chat-messages, .chat-input-area { padding-left: 12px; padding-right: 12px; }
+  .attachment-hint, .input-hint { display: none; }
+  .attachment-toolbar { overflow-x: auto; flex-wrap: nowrap; padding: 2px; }
+  .attachment-btn { white-space: nowrap; min-height: 40px; }
+  .input-row { gap: 7px; }
+  .mic-btn, .send-btn { width: 44px; height: 44px; }
+  .msg { max-width: 94%; }
+  .tasks-panel, .memory-panel, .settings-panel { padding: 16px 12px; }
+  .task-item, .memory-item { align-items: flex-start; padding: 12px; gap: 10px; }
+  .task-right { gap: 6px !important; }
+  .prio-badge { display: none; }
+  .cat-tabs, .task-filter-bar { overflow-x: auto; flex-wrap: nowrap; width: 100%; padding: 2px; }
+  .filter-chip, .cat-tab { flex: 0 0 auto; min-height: 38px; }
+  .memory-actions-bar .danger-btn { width: 100%; }
+  .modal { align-items: flex-end; padding: 8px; }
+  .modal-content { max-height: calc(100dvh - 16px); overflow-y: auto; padding: 18px; }
 
   .bottom-nav {
     padding: 4px;
@@ -1547,6 +1579,7 @@ body {
 
   .nav-item {
     padding: 8px 2px;
-    font-size: 0.74rem;
+    font-size: 0.68rem;
+    min-height: 42px;
   }
 }
