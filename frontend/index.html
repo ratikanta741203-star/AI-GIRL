@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#F3F8FF" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Prity AI" />
+  <title>Prity AI – Personal AI Assistant</title>
+  <link rel="manifest" href="/static/manifest.json" />
+  <link rel="icon" type="image/png" href="/static/baby.png" />
+  <link rel="stylesheet" href="/static/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Outfit:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+</head>
+
+<body>
+  <div class="app">
+    <!-- Top Bar / Header -->
+    <header class="header clay">
+      <div class="logo">
+        <div class="logo-avatar-ring">
+          <img src="/static/baby.png" alt="Prity AI Logo" class="logo-img" />
+        </div>
+        <div class="logo-titles">
+          <span class="logo-text">Prity AI</span>
+          <span class="badge">Prity</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <button id="btn-header-download" class="download-app-btn clay" type="button"
+          title="Download Prity AI Android App">
+          <span class="app-icon">📱</span>
+          <span class="btn-text">Download App</span>
+        </button>
+        <button id="btn-stop-speaking" class="stop-speaking-btn" type="button" aria-pressed="false"
+          title="Stop Prity from speaking" aria-label="Stop Prity from speaking">
+          <span class="stop-speaking-icon" aria-hidden="true">🔊</span>
+          <span class="stop-speaking-label">Voice on</span>
+        </button>
+        <div id="status-indicator" class="status ready">
+          <span class="dot"></span>
+          <span class="label">Ready</span>
+        </div>
+        <button id="btn-settings-header" class="icon-btn clay" title="Settings" data-tab="settings">⚙</button>
+      </div>
+    </header>
+
+    <!-- Main View Container -->
+    <main class="main">
+
+      <!-- ==================== HOME VIEW ==================== -->
+      <div id="view-home" class="tab-view active">
+        <div class="home-grid">
+          <!-- Avatar Hero Panel -->
+          <section class="avatar-panel clay">
+            <div class="avatar-stage" id="avatar-stage">
+              <div class="avatar-character" id="avatar">
+                <!-- Picture with Soft Blush #FFF5F8 Gradient Border -->
+                <div class="avatar-photo-wrap" id="avatar-face">
+                  <img src="/static/baby.png" alt="Prity AI Avatar" class="avatar-photo" id="avatar-photo" />
+                  <div class="avatar-glow" id="avatar-glow"></div>
+                </div>
+              </div>
+              <div class="avatar-caption" id="avatar-caption">Say “Hello Prity”</div>
+            </div>
+            <div class="quick-actions">
+              <button class="clay-btn" data-action="plan">📅 Plan my day</button>
+              <button class="clay-btn" data-action="tasks">✅ Tasks</button>
+              <button class="clay-btn" data-action="motivate">💪 Motivate me</button>
+            </div>
+          </section>
+
+          <!-- Home Dashboard Details -->
+          <section class="home-dashboard">
+            <!-- App Banner Card -->
+            <div class="banner-card clay">
+              <div class="banner-content">
+                <div class="banner-badge">🌸 Prity AI</div>
+                <h2>Experience Prity AI on Android</h2>
+                <p>Run your intelligent, private AI companion on your mobile device anytime, anywhere!</p>
+                <div class="banner-actions">
+                  <button id="btn-hero-download" class="primary-btn clay-btn">
+                    <span>📱 Download APK</span>
+                  </button>
+                  <button class="clay-btn nav-trigger" data-tab="chat">
+                    <span>💬 Open Chat</span>
+                  </button>
+                </div>
+              </div>
+              <div class="banner-image">
+                <div class="logo-avatar-ring large">
+                  <img src="/static/baby.png" alt="Prity AI" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Dashboard Mini Cards -->
+            <div class="dash-cards-grid">
+              <div class="dash-card clay nav-trigger" data-tab="chat">
+                <div class="dash-icon">💬</div>
+                <div class="dash-info">
+                  <h3>Interactive Chat</h3>
+                  <p>Text, voice, and file attachments</p>
+                </div>
+              </div>
+              <div class="dash-card clay nav-trigger" data-tab="tasks">
+                <div class="dash-icon">✅</div>
+                <div class="dash-info">
+                  <h3>Task Manager</h3>
+                  <p id="home-task-count">Manage daily priorities</p>
+                </div>
+              </div>
+              <div class="dash-card clay nav-trigger" data-tab="memory">
+                <div class="dash-icon">🧠</div>
+                <div class="dash-info">
+                  <h3>Memory Bank</h3>
+                  <p id="home-memory-count">Private user context</p>
+                </div>
+              </div>
+              <div class="dash-card clay nav-trigger" data-tab="settings">
+                <div class="dash-icon">⚙</div>
+                <div class="dash-info">
+                  <h3>App Settings</h3>
+                  <p>Customize personality & voice</p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <!-- ==================== CHAT VIEW ==================== -->
+      <div id="view-chat" class="tab-view">
+        <section class="chat-panel clay">
+          <div class="chat-header">
+            <div class="chat-title">
+              <div class="logo-avatar-ring small">
+                <img src="/static/baby.png" alt="Prity" />
+              </div>
+              <div>
+                <strong>Prity AI Assistant</strong>
+                <span class="chat-status-text">Online & Ready</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="chat-messages" id="messages">
+            <div class="msg assistant">
+              <div class="bubble clay">
+                Hi! I’m <strong>Prity</strong>, your personal AI companion. Say <strong>“Hello Prity”</strong> or type a
+                message to start chatting!
+              </div>
+            </div>
+          </div>
+
+          <div class="chat-input-area clay">
+            <input id="file-input" class="file-input-hidden" type="file"
+              accept=".pdf,.docx,.doc,.xlsx,.xls,.csv,.pptx,.ppt,.txt,.md,.json,.xml,.yaml,.yml,.log,.py,.js,.ts,.html,.css,.sql,.sh,.bat,.c,.cpp,.java,.rs,.go" multiple />
+            <input id="image-input" class="file-input-hidden" type="file"
+              accept="image/png,image/jpeg,image/webp,image/gif,image/bmp,image/svg+xml,.png,.jpg,.jpeg,.webp,.gif,.bmp,.svg" multiple />
+            <input id="audio-input" class="file-input-hidden" type="file"
+              accept="audio/wav,audio/mpeg,audio/mp3,audio/aac,audio/ogg,audio/flac,audio/mp4,audio/webm,.wav,.mp3,.mpeg,.mpga,.aiff,.aif,.aac,.ogg,.flac,.m4a,.webm"
+              multiple />
+            <div id="attachment-list" class="attachment-list" aria-live="polite" hidden></div>
+            <div class="attachment-toolbar" aria-label="Attach files to your message">
+              <button id="btn-attach-file" class="attachment-btn clay" type="button"
+                title="Attach PDF, Word (.docx), Excel (.xlsx), PowerPoint (.pptx), or Code">
+                <span aria-hidden="true">📄</span><span>Doc / PPT / Sheet</span>
+              </button>
+              <button id="btn-attach-image" class="attachment-btn clay" type="button" title="Attach an image or photo">
+                <span aria-hidden="true">🖼️</span><span>Image / Picture</span>
+              </button>
+              <button id="btn-attach-audio" class="attachment-btn clay" type="button" title="Attach an audio recording">
+                <span aria-hidden="true">🎵</span><span>Audio</span>
+              </button>
+              <span class="attachment-hint">Supports Images, PDF, DOCX, Excel, PPTX · Up to 8 MB</span>
+            </div>
+            <div class="input-row">
+              <input type="text" id="message-input" class="clay-input" placeholder="Message Prity…"
+                autocomplete="off" />
+              <button id="btn-mic" class="mic-btn clay" title="Voice input">🎤</button>
+              <button id="btn-send" class="send-btn clay" title="Send">➤</button>
+            </div>
+            <div class="input-hint">Press Enter to send · Click 🎤 for voice speech input</div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ==================== TASKS VIEW ==================== -->
+      <div id="view-tasks" class="tab-view">
+        <section class="tasks-panel clay">
+          <div class="panel-header">
+            <h2>✅ Task Manager</h2>
+            <p>Organize your daily activities and let Prity help you stay productive.</p>
+          </div>
+
+          <div class="task-create-card clay-inset">
+            <h3>Add New Task</h3>
+            <form id="form-create-task" class="task-form">
+              <div class="form-row">
+                <input type="text" id="task-title-input" class="clay-input"
+                  placeholder="Task title (e.g. Work out at 5 PM)" required />
+                <select id="task-priority-select" class="clay-input select-priority">
+                  <option value="0">Normal Priority</option>
+                  <option value="1">⭐ High Priority</option>
+                  <option value="2">🔥 Urgent</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <input type="text" id="task-desc-input" class="clay-input"
+                  placeholder="Description or extra notes (optional)" />
+                <button type="submit" class="primary-btn clay-btn">➕ Add Task</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="task-filter-bar">
+            <button class="filter-chip active" data-filter="all">All Tasks</button>
+            <button class="filter-chip" data-filter="pending">Pending</button>
+            <button class="filter-chip" data-filter="completed">Completed</button>
+          </div>
+
+          <div id="tasks-list" class="tasks-list">
+            <div class="empty-state">Loading tasks…</div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ==================== MEMORY VIEW ==================== -->
+      <div id="view-memory" class="tab-view">
+        <section class="memory-panel clay">
+          <div class="panel-header">
+            <h2>🧠 Memory Bank</h2>
+            <p>View and manage information Prity remembers about you.</p>
+          </div>
+
+          <div class="memory-add-card clay-inset">
+            <h3>Add Memory Entry</h3>
+            <form id="form-create-memory" class="memory-form">
+              <div class="form-row trio">
+                <select id="memory-category-select" class="clay-input">
+                  <option value="personal">Personal Info</option>
+                  <option value="preference">Preference</option>
+                  <option value="general">General</option>
+                </select>
+                <input type="text" id="memory-key-input" class="clay-input"
+                  placeholder="Topic / Key (e.g. Favorite food)" required />
+                <input type="text" id="memory-val-input" class="clay-input" placeholder="Value (e.g. Ice cream)"
+                  required />
+              </div>
+              <div class="form-row right">
+                <button type="submit" class="primary-btn clay-btn">💾 Save Memory</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="memory-actions-bar">
+            <div class="cat-tabs">
+              <button class="cat-tab active" data-cat="all">All Memory</button>
+              <button class="cat-tab" data-cat="personal">Personal</button>
+              <button class="cat-tab" data-cat="preference">Preferences</button>
+              <button class="cat-tab" data-cat="general">General</button>
+            </div>
+            <button id="btn-clear-all-memory" class="danger-btn clay-btn">🗑️ Clear Memory</button>
+          </div>
+
+          <div id="memory-list" class="memory-list">
+            <div class="empty-state">Loading memory bank…</div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ==================== SETTINGS VIEW ==================== -->
+      <div id="view-settings" class="tab-view">
+        <section class="settings-panel clay">
+          <div class="panel-header">
+            <h2>⚙ Application Settings</h2>
+            <p>Customize your AI assistant's personality, speech, and preferences.</p>
+          </div>
+
+          <div class="settings-card clay-inset">
+            <div class="form-group">
+              <label for="cfg-personality-view">Personality Style</label>
+              <select id="cfg-personality-view" class="clay-input">
+                <option value="friendly">Friendly & Warm</option>
+                <option value="professional">Professional & Focused</option>
+                <option value="playful">Playful & Energetic</option>
+                <option value="calm">Calm & Gentle</option>
+                <option value="motivational">Motivational & Inspiring</option>
+              </select>
+            </div>
+
+            <!-- AI Girl Voice Settings -->
+            <div class="settings-divider">
+              <span>🎙️ AI Girl Voice Settings</span>
+            </div>
+
+            <div class="form-group">
+              <label for="cfg-voice-view">AI Voice Model</label>
+              <select id="cfg-voice-view" class="clay-input">
+                <option value="">Loading system voices…</option>
+              </select>
+              <span class="input-note">Select your preferred female / AI companion voice for speech synthesis</span>
+            </div>
+
+            <div class="form-group">
+              <div class="slider-header">
+                <label for="cfg-voice-pitch">Voice Pitch / Tone</label>
+                <span id="val-pitch" class="slider-badge">1.15x (Cute / Sweet)</span>
+              </div>
+              <input type="range" id="cfg-voice-pitch" class="clay-range" min="0.6" max="1.8" step="0.05"
+                value="1.15" />
+              <div class="slider-labels">
+                <span>Deeper</span>
+                <span>Natural</span>
+                <span>Cute / Sweet</span>
+                <span>Anime</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="slider-header">
+                <label for="cfg-voice-rate">Voice Speed</label>
+                <span id="val-rate" class="slider-badge">1.0x (Normal)</span>
+              </div>
+              <input type="range" id="cfg-voice-rate" class="clay-range" min="0.6" max="1.6" step="0.05" value="1.0" />
+              <div class="slider-labels">
+                <span>Slow</span>
+                <span>Normal</span>
+                <span>Fast</span>
+              </div>
+            </div>
+
+            <div class="voice-preview-row">
+              <button id="btn-test-voice" type="button" class="clay-btn">
+                <span>🔊 Test AI Voice</span>
+              </button>
+              <span class="preview-note">Click to preview current AI Girl voice</span>
+            </div>
+
+            <div class="settings-divider">
+              <span>⚡ System & Interaction</span>
+            </div>
+
+            <div class="form-group">
+              <label for="cfg-wake-view">Wake Word</label>
+              <input type="text" id="cfg-wake-view" class="clay-input" value="hello prity" disabled />
+              <span class="input-note">Say “Hello Prity” to wake voice speech recognition</span>
+            </div>
+
+            <div class="form-group row-check">
+              <label class="checkbox-label">
+                <input type="checkbox" id="cfg-voice-auto-view" checked />
+                <span>Auto-read AI replies (Voice output on every response)</span>
+              </label>
+            </div>
+
+            <div class="form-group row-check">
+              <label class="checkbox-label">
+                <input type="checkbox" id="cfg-local-view" checked />
+                <span>Local Mode (Private & Local-First execution)</span>
+              </label>
+            </div>
+
+            <div class="form-group row-check">
+              <label class="checkbox-label">
+                <input type="checkbox" id="cfg-proactive-view" checked />
+                <span>Proactive Reminders & Daily Notifications</span>
+              </label>
+            </div>
+
+            <div class="form-actions">
+              <button id="btn-save-settings-page" class="primary-btn clay-btn">💾 Save Settings</button>
+            </div>
+
+            <div class="settings-footer-info">
+              <p>Powered by <strong>Prity AI Engine</strong> · Version 2.0.0</p>
+              <p>Tailored with Ice Blue (#F3F8FF) & Soft Blush (#FFF5F8) styling</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+    </main>
+
+    <!-- Bottom Navigation Bar for Mobile/Touch & Desktop -->
+    <nav class="bottom-nav clay">
+      <button class="nav-item active" data-tab="home">🏠 Home</button>
+      <button class="nav-item" data-tab="chat">💬 Chat</button>
+      <button class="nav-item" data-tab="tasks">✅ Tasks</button>
+      <button class="nav-item" data-tab="memory">🧠 Memory</button>
+      <button class="nav-item" data-tab="settings">⚙ Settings</button>
+    </nav>
+
+    <!-- ==================== ANDROID APP DOWNLOAD MODAL ==================== -->
+    <div id="download-modal" class="modal hidden">
+      <div class="modal-content clay">
+        <div class="modal-header">
+          <div class="logo-avatar-ring large">
+            <img src="/static/baby.png" alt="Prity AI Logo" />
+          </div>
+          <h3>Download Prity AI App</h3>
+          <p>Get the official Prity AI package (APK)</p>
+        </div>
+        <div class="download-info-box clay-inset">
+          <div class="info-row">
+            <span>App Name:</span> <strong>Prity AI</strong>
+          </div>
+          <div class="info-row">
+            <span>Version:</span> <strong>2.0.0 (Android APK)</strong>
+          </div>
+          <div class="info-row">
+            <span>Package:</span> <strong>com.prityai.app</strong>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <a id="btn-download-apk-link" href="/api/download/apk" class="primary-btn clay-btn full-width"
+            download="Prity_AI_v2.0.apk">
+            <span>📲 Download APK File (Direct)</span>
+          </a>
+          <button id="btn-close-download" class="clay-btn full-width">Close</button>
+        </div>
+        <div class="install-guide">
+          <h4>How to Install on Android:</h4>
+          <ol>
+            <li>Click <strong>Download APK File</strong> above.</li>
+            <li>When prompted, allow downloading from your browser.</li>
+            <li>Open the downloaded APK and select <strong>Install</strong> (enable "Install from Unknown Sources" if
+              asked).</li>
+            <li>Open <strong>Prity AI</strong> on your phone!</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast hidden"></div>
+  </div>
+
+  <script src="/static/script.js"></script>
+</body>
+
+</html>

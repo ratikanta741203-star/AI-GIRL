@@ -1,0 +1,33 @@
+# AI Girl - Personal AI Companion
+# Core
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+python-multipart>=0.0.12
+pydantic>=2.9.0
+pydantic-settings>=2.6.0
+python-dotenv>=1.0.1
+
+# Database
+sqlalchemy>=2.0.36
+aiosqlite>=0.20.0
+
+# AI / LLM
+httpx>=0.27.2
+openai>=1.54.0          # for OpenAI-compatible endpoints (Ollama, etc.)
+google-generativeai>=0.8.3  # optional Gemini
+pypdf>=5.0.0             # extract text from attached PDF files
+
+# Voice (optional - install only what you need)
+# openai-whisper>=20240930
+# faster-whisper>=1.0.3
+# piper-tts  or  edge-tts
+# pvporcupine  (wake word - requires Picovoice key)
+
+# Utilities
+aiofiles>=24.1.0
+numpy>=1.26.0
+sounddevice>=0.5.0        # optional local audio
+soundfile>=0.12.1
+
+# Frontend serving already covered by FastAPI
+# For desktop packaging later: electron / tauri / pywebview
