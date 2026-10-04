@@ -768,10 +768,13 @@ async def download_apk():
     except Exception:
         apk_path = os.path.join(frontend_dir, "Prity_AI.apk")
     
-    if not os.path.exists(apk_path):
-        with open(apk_path, "wb") as f:
-            f.write(b"PK\x03\x04\x14\x00\x08\x00\x08\x00" + b"\x00" * 100 + b"Prity AI Prity AI Package v2.0")
-            
+    # Do not serve a placeholder archive: Android rejects it as invalid.
+    if not os.path.exists(apk_path) or os.path.getsize(apk_path) < 1024 * 1024:
+        raise HTTPException(
+            status_code=404,
+            detail="An Android APK has not been published. Install Prity AI from your browser instead."
+        )
+
     return FileResponse(
         apk_path,
         filename="Prity_AI_v2.0.apk",
@@ -1300,6 +1303,18 @@ async def complete_task(
     return {
         "ok": True
     }
+
+
+@app.post("/api/tasks/{task_id}/reopen")
+async def reopen_task(task_id: int):
+    """Return a completed task to the pending list."""
+    if not memory:
+        raise HTTPException(status_code=503, detail="Memory system unavailable.")
+
+    if not memory.uncomplete_task(task_id):
+        raise HTTPException(status_code=404, detail="Task not found")
+
+    return {"ok": True}
 
 
 @app.delete(
