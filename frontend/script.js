@@ -3,7 +3,9 @@
  * Supports Chat, Tasks, Memory, Settings, Android App Download, Voice (STT/TTS), and Avatar
  */
 
-const API = window.location.origin;
+// The browser uses its own origin.  The Android wrapper injects the address of
+// the FastAPI server before this script loads, so the same UI works in both.
+const API = (window.PRITY_API_BASE_URL || window.location.origin).replace(/\/$/, "");
 
 // DOM Elements
 const messagesEl = document.getElementById("messages");
@@ -102,6 +104,7 @@ const btnHeroDownload = document.getElementById("btn-hero-download");
 const btnCloseDownload = document.getElementById("btn-close-download");
 const btnInstallApp = document.getElementById("btn-install-app");
 let installPrompt = null;
+const isAndroidWrapper = /; wv\)/i.test(navigator.userAgent);
 
 window.addEventListener("beforeinstallprompt", (event) => {
   event.preventDefault();
@@ -119,6 +122,10 @@ if ("serviceWorker" in navigator) {
 }
 
 function openDownloadModal() {
+  if (isAndroidWrapper) {
+    showToast("Prity AI is already installed as an Android app.");
+    return;
+  }
   if (downloadModal) downloadModal.classList.remove("hidden");
 }
 

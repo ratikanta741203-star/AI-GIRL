@@ -1,0 +1,9 @@
+<resources>
+    <style name="Theme.PrityAI" parent="android:style/Theme.Material.Light">
+        <item name="android:fontFamily">sans</item>
+        <item name="android:colorAccent">@color/blue_700</item>
+        <item name="android:navigationBarColor">@color/ice_blue</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@color/ice_blue</item>
+    </style>
+</resources>
